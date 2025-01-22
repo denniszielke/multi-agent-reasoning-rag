@@ -4,7 +4,7 @@ import logging
 import uuid
 from typing import List, Optional
 from middleware.health_check import HealthCheckMiddleware
-from autogen_core.base import AgentId
+from autogen_core import AgentId
 from fastapi import Depends, FastAPI, HTTPException, Query, Request
 from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles

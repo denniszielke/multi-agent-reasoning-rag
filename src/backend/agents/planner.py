@@ -4,11 +4,11 @@ import logging
 import uuid
 from typing import List, Optional
 
-from autogen_core.base import MessageContext
-from autogen_core.components import (RoutedAgent, default_subscription,
+from autogen_core import MessageContext
+from autogen_core import (RoutedAgent, default_subscription,
                                      message_handler)
-from autogen_core.components.models import (AzureOpenAIChatCompletionClient,
-                                            LLMMessage, UserMessage)
+from autogen_core.models import (LLMMessage, UserMessage)
+from autogen_ext.models.openai import AzureOpenAIChatCompletionClient
 from pydantic import BaseModel
 
 from context.cosmos_memory import CosmosBufferedChatCompletionContext

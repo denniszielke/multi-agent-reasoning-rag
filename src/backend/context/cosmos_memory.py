@@ -5,8 +5,8 @@ import logging
 import uuid
 from typing import Any, Dict, List, Optional, Type
 
-from autogen_core.components.model_context import BufferedChatCompletionContext
-from autogen_core.components.models import (AssistantMessage,
+from autogen_core.model_context import BufferedChatCompletionContext
+from autogen_core.models import (AssistantMessage,
                                             FunctionExecutionResultMessage,
                                             LLMMessage, SystemMessage,
                                             UserMessage)

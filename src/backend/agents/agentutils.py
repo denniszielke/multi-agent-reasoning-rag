@@ -1,7 +1,7 @@
 import json
 
-from autogen_core.components.models import (AssistantMessage,
-                                            AzureOpenAIChatCompletionClient)
+from autogen_core.models import AssistantMessage
+from autogen_ext.models.openai import AzureOpenAIChatCompletionClient
 from pydantic import BaseModel
 
 from context.cosmos_memory import CosmosBufferedChatCompletionContext

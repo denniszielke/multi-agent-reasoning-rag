@@ -5,10 +5,10 @@ from datetime import datetime
 import re
 from typing import Dict, List
 
-from autogen_core.base import AgentId, MessageContext
-from autogen_core.components import (RoutedAgent, default_subscription,
+from autogen_core import AgentId, MessageContext
+from autogen_core import (RoutedAgent, default_subscription,
                                      message_handler)
-from autogen_core.components.models import AzureOpenAIChatCompletionClient
+from autogen_ext.models.openai import AzureOpenAIChatCompletionClient
 
 from context.cosmos_memory import CosmosBufferedChatCompletionContext
 from models.messages import (

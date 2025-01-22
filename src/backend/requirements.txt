@@ -1,6 +1,7 @@
 fastapi
 uvicorn
-autogen-agentchat==0.4.0dev1
+autogen-agentchat==0.4.3
+autogen-ext[openai,azure]==0.4.3
 azure-cosmos
 azure-identity
 python-dotenv

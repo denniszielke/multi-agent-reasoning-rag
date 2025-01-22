@@ -1,8 +1,8 @@
 # human_agent.py
 import logging
 
-from autogen_core.base import AgentId, MessageContext
-from autogen_core.components import (RoutedAgent, default_subscription,
+from autogen_core import AgentId, MessageContext
+from autogen_core import (RoutedAgent, default_subscription,
                                      message_handler)
 
 from context.cosmos_memory import CosmosBufferedChatCompletionContext
