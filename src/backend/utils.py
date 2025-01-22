@@ -346,7 +346,7 @@ def rai_success(description: str) -> bool:
     access_token = credential.get_token("https://cognitiveservices.azure.com/.default").token
     CHECK_ENDPOINT = os.getenv("AZURE_OPENAI_ENDPOINT")
     API_VERSION = os.getenv("AZURE_OPENAI_API_VERSION")
-    DEPLOYMENT_NAME = os.getenv("AZURE_OPENAI_DEPLOYMENT_NAME")
+    DEPLOYMENT_NAME = os.getenv("AZURE_OPENAI_COMPLETION_DEPLOYMENT_NAME")
     url = f"{CHECK_ENDPOINT}/openai/deployments/{DEPLOYMENT_NAME}/chat/completions?api-version={API_VERSION}"
     headers = {
         "Authorization": f"Bearer {access_token}",
