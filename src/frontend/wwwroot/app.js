@@ -75,16 +75,18 @@
     };
 
     const homeActions = () => {
-        newTaskButton.addEventListener('click', (event) => {
-            event.preventDefault();
-            setQueryParam('v', 'home');
-            switchView();
-        });
-        goHomeButton.addEventListener('click', (event) => {
-            event.preventDefault();
-            setQueryParam('v', 'home');
-            switchView();
-        });
+        if (newTaskButton != null)
+            newTaskButton.addEventListener('click', (event) => {
+                event.preventDefault();
+                setQueryParam('v', 'home');
+                switchView();
+            });
+        if (goHomeButton != null)
+            goHomeButton.addEventListener('click', (event) => {
+                event.preventDefault();
+                setQueryParam('v', 'home');
+                switchView();
+            });
     };
     const messageListeners = () => {
 
@@ -221,7 +223,7 @@
         }
     };
 
-    fetchTasksIfNeeded();
+    //fetchTasksIfNeeded();
     initializeApp();
     homeActions();
     switchView();

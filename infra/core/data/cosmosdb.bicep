@@ -20,21 +20,6 @@ param enableNoSQLVectorSearch bool = true
 @description('Disables key-based authentication. Defaults to false.')
 param disableKeyBasedAuth bool = true
 
-param containers array = [
-  {
-    name: containerName
-    id: containerName
-    partitionKey: '/id'
-    indexKey: 'id'
-  }
-  {
-    name: 'memory'
-    id: 'memory'
-    partitionKey: '/session_id'
-    indexKey: 'id'
-  }
-]
-
 resource account 'Microsoft.DocumentDB/databaseAccounts@2024-05-15' = {
   name: accountName
   location: location
@@ -94,20 +79,38 @@ resource database 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases@2022-05-15
     resource: { id: databaseName }
   }
 
-  resource list 'containers' = [for container in containers: {
-    name: container.name
-    properties: {
-      resource: {
-        id: container.id
-        partitionKey: { 
-          kind: 'Hash'
-          version: 2
-          paths: [ container.partitionKey ] 
+  resource documentContainer 'containers' = {
+      name: containerName
+      properties: {
+        resource: {
+          id: containerName
+          partitionKey: {
+            kind: 'Hash'
+            version: 2
+            paths: [
+              '/id'
+            ]
+            
+          }
         }
       }
-      options: {}
     }
-  }]
+
+  resource memoryContainer 'containers' = {
+      name: 'memory'
+      properties: {
+        resource: {
+          id: 'memory'
+          partitionKey: {
+            kind: 'Hash'
+            version: 2
+            paths: [
+              '/session_id'
+            ]
+          }
+        }
+      }
+    }
 }
 
 output name string = account.name
