@@ -1,6 +1,6 @@
 (() => {
     window.headers = GetAuthDetails();
-    const apiEndpoint = BACKEND_API_URL;
+    const apiEndpoint = 'http://localhost:8000';
     const goHomeButton = document.getElementById("goHomeButton");
     const newTaskButton = document.getElementById("newTaskButton");
     const closeModalButtons = document.querySelectorAll(".modal-close-button");
@@ -46,7 +46,7 @@
     };
     // get user session 
     const getUserInfo = async () => {
-        if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+        if (false && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1' && !windowl.location.hostname.contains("devtunnels.ms")) {
             // Runninng in Azure so get user info from /.auth/me
           try {
               const response = await fetch('/.auth/me');

@@ -1,4 +1,5 @@
 fastapi
+aiohttp
 uvicorn
 autogen-agentchat==0.4.3
 autogen-ext[openai,azure]==0.4.3

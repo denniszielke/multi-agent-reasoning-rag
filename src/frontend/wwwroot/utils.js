@@ -12,7 +12,7 @@ window.GenerateHash = async (data) => {
 // Function to fetch authentication details from EasyAuth
 window.GetAuthDetails = async () => {
     // Check if we are running on the server (production environment)
-    if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+    if (false && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
         // This code runs on the server
         try {
             const authResponse = await fetch('/.auth/me');
