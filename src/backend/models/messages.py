@@ -21,12 +21,8 @@ class BAgentType(str, Enum):
     """Enumeration of agent types."""
 
     human_agent = "HumanAgent"
-    hr_agent = "HrAgent"
-    marketing_agent = "MarketingAgent"
-    procurement_agent = "ProcurementAgent"
-    product_agent = "ProductAgent"
+    financial_agent = "FinancialAgent"
     generic_agent = "GenericAgent"
-    tech_support_agent = "TechSupportAgent"
     group_chat_manager = "GroupChatManager"
     planner_agent = "PlannerAgent"
 

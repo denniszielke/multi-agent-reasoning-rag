@@ -37,6 +37,9 @@ class Config:
 
     AZURE_OPENAI_DEPLOYMENT_NAME = GetRequiredConfig("AZURE_OPENAI_COMPLETION_DEPLOYMENT_NAME")
     AZURE_OPENAI_API_VERSION = GetRequiredConfig("AZURE_OPENAI_API_VERSION")
+    AZURE_OPENAI_SMALL_COMPLETION_DEPLOYMENT_NAME = GetRequiredConfig("AZURE_OPENAI_SMALL_COMPLETION_DEPLOYMENT_NAME")
+    AZURE_OPENAI_SMALL_COMPLETION_MODEL_VERSION = GetRequiredConfig("AZURE_OPENAI_SMALL_COMPLETION_MODEL_VERSION")
+
     AZURE_OPENAI_ENDPOINT = GetRequiredConfig("AZURE_OPENAI_ENDPOINT")
     AZURE_OPENAI_API_KEY = GetOptionalConfig("AZURE_OPENAI_API_KEY")
 
@@ -47,6 +50,7 @@ class Config:
     __comos_client = None
     __cosmos_database = None
     __aoai_chatCompletionClient = None
+    __aoai_smallchatCompletionClient = None
 
     def GetAzureCredentials():
         # If we have specified the credentials in the environment, use them (backwards compatibility)
@@ -108,3 +112,32 @@ class Config:
             )
 
         return Config.__aoai_chatCompletionClient
+    
+    def GetSmallAzureOpenAIChatCompletionClient(model_capabilities):
+        if Config.__aoai_smallchatCompletionClient is not None:
+            return Config.__aoai_smallchatCompletionClient
+
+        if Config.AZURE_OPENAI_API_KEY == "":
+            # Use DefaultAzureCredential for auth
+            Config.__aoai_smallchatCompletionClient = AzureOpenAIChatCompletionClient(
+                model=Config.AZURE_OPENAI_SMALL_COMPLETION_DEPLOYMENT_NAME,
+                api_version=Config.AZURE_OPENAI_SMALL_COMPLETION_MODEL_VERSION,
+                azure_endpoint=Config.AZURE_OPENAI_ENDPOINT,
+                azure_ad_token_provider=Config.GetTokenProvider(
+                    "https://cognitiveservices.azure.com/.default"
+                ),
+                model_capabilities=model_capabilities,
+                temperature=0,
+            )
+        else:
+            # Fallback behavior to use API key
+            Config.__aoai_smallchatCompletionClient = AzureOpenAIChatCompletionClient(
+                model=Config.AZURE_OPENAI_SMALL_COMPLETION_DEPLOYMENT_NAME,
+                api_version=Config.AZURE_OPENAI_SMALL_COMPLETION_MODEL_VERSION,
+                azure_endpoint=Config.AZURE_OPENAI_ENDPOINT,
+                api_key=Config.AZURE_OPENAI_API_KEY,
+                model_capabilities=model_capabilities,
+                temperature=0,
+            )
+
+        return Config.__aoai_smallchatCompletionClient

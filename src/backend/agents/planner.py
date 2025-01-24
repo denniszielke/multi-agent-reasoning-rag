@@ -146,11 +146,9 @@ class PlannerAgent(RoutedAgent):
 
         The agents you have access to are:
         {agents}
-
+        
         These agents have access to the following functions:
         {self._agent_tools_list}
-
-
         The first step of your plan should be to ask the user for any additional information required to progress the rest of steps planned.
 
         Only use the functions provided as part of your plan. If the task is not possible with the agents and tools provided, create a step with the agent of type Exception and mark the overall status as completed.
@@ -170,10 +168,12 @@ class PlannerAgent(RoutedAgent):
         If a general Large Language Model CAN handle the step/required action, add a step to the plan with the action you believe would be needed, and add "EXCEPTION: No suitable function found. A generic LLM model is being used for this step." to the end of the action. Assign these steps to the GenericAgent. For example, if the task is to convert the following SQL into python code (SELECT * FROM employees;), and there is no function to convert SQL to python, write a step with the action "convert the following SQL into python code (SELECT * FROM employees;) EXCEPTION: No suitable function found. A generic LLM model is being used for this step." and assign it to the GenericAgent.
         Alternatively, if a general Large Language Model CAN NOT handle the step/required action, add a step to the plan with the action you believe would be needed, and add "EXCEPTION: Human support required to do this step, no suitable function found." to the end of the action. Assign these steps to the HumanAgent. For example, if the task is to find the best way to get from A to B, and there is no function to calculate the best route, write a step with the action "Calculate the best route from A to B. EXCEPTION: Human support required, no suitable function found." and assign it to the HumanAgent.
 
-
         Limit the plan to 6 steps or less.
 
-        Choose from HumanAgent, HrAgent, MarketingAgent, ProcurementAgent, ProductAgent, TechSupportAgent, GenericAgent ONLY for planning your steps.
+        Choose from HumanAgent, FinancialAgent, GenericAgent ONLY for planning your steps.
+        Do NOT use any other agent types or make tool calls directly.
+
+        DO NOT use any tools.
 
         """
         return instruction_template
@@ -202,10 +202,11 @@ class PlannerAgent(RoutedAgent):
                 messages,
                 extra_create_args={"response_format": StructuredOutputPlan},
             )
-            content = result.content
+
+            model_response = result.content
 
             # Parse the LLM response
-            parsed_result = json.loads(content)
+            parsed_result = json.loads(model_response)
             structured_plan = StructuredOutputPlan(**parsed_result)
 
             # Create the Plan instance

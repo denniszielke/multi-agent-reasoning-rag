@@ -11,14 +11,10 @@ from autogen_core.tool_agent import ToolAgent
 from autogen_core.tools import Tool
 
 from agents.group_chat_manager import GroupChatManager
-from agents.hr import HrAgent, get_hr_tools
+from agents.financial import FinancialAgent, get_financial_tools
 from agents.human import HumanAgent
-from agents.marketing import MarketingAgent, get_marketing_tools
 from agents.planner import PlannerAgent
-from agents.procurement import ProcurementAgent, get_procurement_tools
-from agents.product import ProductAgent, get_product_tools
 from agents.generic import GenericAgent, get_generic_tools
-from agents.tech_support import TechSupportAgent, get_tech_support_tools
 
 # from agents.misc import MiscAgent
 from config import Config
@@ -43,13 +39,8 @@ runtime_dict: Dict[
     str, Tuple[SingleThreadedAgentRuntime, CosmosBufferedChatCompletionContext]
 ] = {}
 
-hr_tools = get_hr_tools()
-marketing_tools = get_marketing_tools()
-procurement_tools = get_procurement_tools()
-product_tools = get_product_tools()
+financial_tools = get_financial_tools()
 generic_tools = get_generic_tools()
-tech_support_tools = get_tech_support_tools()
-
 
 # Initialize the Azure OpenAI model client
 aoai_model_client = Config.GetAzureOpenAIChatCompletionClient(
@@ -60,6 +51,13 @@ aoai_model_client = Config.GetAzureOpenAIChatCompletionClient(
     }
 )
 
+aoai_small_model_client = Config.GetAzureOpenAIChatCompletionClient(
+    {
+        "vision": False,
+        "function_calling": False,
+        "json_output": True,
+    }
+)
 
 # Initialize the Azure OpenAI model client
 async def initialize_runtime_and_context(
@@ -90,18 +88,10 @@ async def initialize_runtime_and_context(
     # Initialize agents with AgentIds that include session_id to ensure uniqueness
     planner_agent_id = AgentId("planner_agent", session_id)
     human_agent_id = AgentId("human_agent", session_id)
-    hr_agent_id = AgentId("hr_agent", session_id)
-    hr_tool_agent_id = AgentId("hr_tool_agent", session_id)
-    marketing_agent_id = AgentId("marketing_agent", session_id)
-    marketing_tool_agent_id = AgentId("marketing_tool_agent", session_id)
-    procurement_agent_id = AgentId("procurement_agent", session_id)
-    procurement_tool_agent_id = AgentId("procurement_tool_agent", session_id)
-    product_agent_id = AgentId("product_agent", session_id)
     generic_agent_id = AgentId("generic_agent", session_id)
-    product_tool_agent_id = AgentId("product_tool_agent", session_id)
     generic_tool_agent_id = AgentId("generic_tool_agent", session_id)
-    tech_support_agent_id = AgentId("tech_support_agent", session_id)
-    tech_support_tool_agent_id = AgentId("tech_support_tool_agent", session_id)
+    financial_agent_id = AgentId("financial_agent", session_id)
+    financial_tool_agent_id = AgentId("financial_tool_agent", session_id)
     group_chat_manager_id = AgentId("group_chat_manager", session_id)  
 
     # Initialize the context for the session
@@ -111,33 +101,16 @@ async def initialize_runtime_and_context(
     runtime = SingleThreadedAgentRuntime(tracer_provider=None)
 
     # Register tool agents
-    await ToolAgent.register(
-        runtime, "hr_tool_agent", lambda: ToolAgent("HR tool execution agent", hr_tools)
-    )
+
     await ToolAgent.register(
         runtime,
-        "marketing_tool_agent",
-        lambda: ToolAgent("Marketing tool execution agent", marketing_tools),
-    )
-    await ToolAgent.register(
-        runtime,
-        "procurement_tool_agent",
-        lambda: ToolAgent("Procurement tool execution agent", procurement_tools),
-    )
-    await ToolAgent.register(
-        runtime,
-        "product_tool_agent",
-        lambda: ToolAgent("Product tool execution agent", product_tools),
+        "financial_tool_agent",
+        lambda: ToolAgent("Financial tool execution agent", financial_tools),
     )
     await ToolAgent.register(
         runtime,
         "generic_tool_agent",
         lambda: ToolAgent("Generic tool execution agent", generic_tools),
-    )
-    await ToolAgent.register(
-        runtime,
-        "tech_support_tool_agent",
-        lambda: ToolAgent("Tech support tool execution agent", tech_support_tools),
     )
     await ToolAgent.register(
         runtime,
@@ -150,73 +123,33 @@ async def initialize_runtime_and_context(
         runtime,
         planner_agent_id.type,
         lambda: PlannerAgent(
-            aoai_model_client,
+            aoai_small_model_client,
             session_id,
             user_id,
             cosmos_memory,
             [
                 agent.type
                 for agent in [
-                    hr_agent_id,
-                    marketing_agent_id,
-                    procurement_agent_id,
-                    procurement_agent_id,
-                    product_agent_id,
+                    financial_agent_id,
                     generic_agent_id,
-                    tech_support_agent_id,
                 ]
             ],
             retrieve_all_agent_tools(),
         ),
     )
-    await HrAgent.register(
+    await FinancialAgent.register(
         runtime,
-        hr_agent_id.type,
-        lambda: HrAgent(
+        financial_agent_id.type,
+        lambda: FinancialAgent(
             aoai_model_client,
             session_id,
             user_id,
             cosmos_memory,
-            hr_tools,
-            hr_tool_agent_id,
+            financial_tools,
+            financial_tool_agent_id,
         ),
     )
-    await MarketingAgent.register(
-        runtime,
-        marketing_agent_id.type,
-        lambda: MarketingAgent(
-            aoai_model_client,
-            session_id,
-            user_id,
-            cosmos_memory,
-            marketing_tools,
-            marketing_tool_agent_id,
-        ),
-    )
-    await ProcurementAgent.register(
-        runtime,
-        procurement_agent_id.type,
-        lambda: ProcurementAgent(
-            aoai_model_client,
-            session_id,
-            user_id,
-            cosmos_memory,
-            procurement_tools,
-            procurement_tool_agent_id,
-        ),
-    )
-    await ProductAgent.register(
-        runtime,
-        product_agent_id.type,
-        lambda: ProductAgent(
-            aoai_model_client,
-            session_id,
-            user_id,
-            cosmos_memory,
-            product_tools,
-            product_tool_agent_id,
-        ),
-    )
+    
     await GenericAgent.register(
         runtime,
         generic_agent_id.type,
@@ -229,18 +162,7 @@ async def initialize_runtime_and_context(
             generic_tool_agent_id,
         ),
     )
-    await TechSupportAgent.register(
-        runtime,
-        tech_support_agent_id.type,
-        lambda: TechSupportAgent(
-            aoai_model_client,
-            session_id,
-            user_id,
-            cosmos_memory,
-            tech_support_tools,
-            tech_support_tool_agent_id,
-        ),
-    )
+
     await HumanAgent.register(
         runtime,
         human_agent_id.type,
@@ -250,12 +172,8 @@ async def initialize_runtime_and_context(
     agent_ids = {
         BAgentType.planner_agent: planner_agent_id,
         BAgentType.human_agent: human_agent_id,
-        BAgentType.hr_agent: hr_agent_id,
-        BAgentType.marketing_agent: marketing_agent_id,
-        BAgentType.procurement_agent: procurement_agent_id,
-        BAgentType.product_agent: product_agent_id,
+        BAgentType.financial_agent: financial_agent_id,
         BAgentType.generic_agent: generic_agent_id,
-        BAgentType.tech_support_agent: tech_support_agent_id,
     }
     await GroupChatManager.register(
         runtime,
@@ -275,63 +193,14 @@ async def initialize_runtime_and_context(
 
 
 def retrieve_all_agent_tools() -> List[Dict[str, Any]]:
-    hr_tools: List[Tool] = get_hr_tools()
-    marketing_tools: List[Tool] = get_marketing_tools()
-    procurement_tools: List[Tool] = get_procurement_tools()
-    product_tools: List[Tool] = get_product_tools()
-    tech_support_tools: List[Tool] = get_tech_support_tools()
-
+    financial_tools: List[Tool] = get_financial_tools()
     functions = []
 
     # Add TechSupportAgent functions
-    for tool in tech_support_tools:
+    for tool in financial_tools:
         functions.append(
             {
-                "agent": "TechSupportAgent",
-                "function": tool.name,
-                "description": tool.description,
-                "arguments": str(tool.schema["parameters"]["properties"]),
-            }
-        )
-
-    # Add ProcurementAgent functions
-    for tool in procurement_tools:
-        functions.append(
-            {
-                "agent": "ProcurementAgent",
-                "function": tool.name,
-                "description": tool.description,
-                "arguments": str(tool.schema["parameters"]["properties"]),
-            }
-        )
-
-    # Add HRAgent functions
-    for tool in hr_tools:
-        functions.append(
-            {
-                "agent": "HrAgent",
-                "function": tool.name,
-                "description": tool.description,
-                "arguments": str(tool.schema["parameters"]["properties"]),
-            }
-        )
-
-    # Add MarketingAgent functions
-    for tool in marketing_tools:
-        functions.append(
-            {
-                "agent": "MarketingAgent",
-                "function": tool.name,
-                "description": tool.description,
-                "arguments": str(tool.schema["parameters"]["properties"]),
-            }
-        )
-
-    # Add ProductAgent functions
-    for tool in product_tools:
-        functions.append(
-            {
-                "agent": "ProductAgent",
+                "agent": "FinancialAgent",
                 "function": tool.name,
                 "description": tool.description,
                 "arguments": str(tool.schema["parameters"]["properties"]),
