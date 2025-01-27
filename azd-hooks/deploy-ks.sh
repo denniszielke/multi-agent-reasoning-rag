@@ -36,7 +36,7 @@ SEARCH_ENDPOINT=$(echo "https://$SEARCH_NAME.search.windows.net")
 OPENAI_ENDPOINT=$(az cognitiveservices account show -n $OPENAI_NAME -g $RESOURCE_GROUP --query properties.endpoint -o tsv)
 DOC_INTEL_ENDPOINT=$(az cognitiveservices account show -n $DOC_INTEL_NAME -g $RESOURCE_GROUP --query properties.endpoint -o tsv)
 AI_TEXT_DEPLOYMENT="gpt-4o"
-AI_EMBEDDING_DEPLOYMENT="text-embedding-3-small"
+AI_EMBEDDING_DEPLOYMENT="text-embedding-ada-002"
 
 echo "container registry name: $AZURE_CONTAINER_REGISTRY_NAME"
 echo "application insights name: $APPINSIGHTS_NAME"
@@ -71,13 +71,11 @@ IMAGE_NAME="${AZURE_CONTAINER_REGISTRY_NAME}.azurecr.io/kernelmemory/service"
 
 echo "deploying image: $IMAGE_NAME"
 
-URI=$(az deployment group create -g $RESOURCE_GROUP -f ./infra/app/kernelservice.bicep \
+az deployment group create -g $RESOURCE_GROUP -f ./infra/app/kernelservice.bicep \
           -p kmServiceName=$SERVICE_NAME -p location=$LOCATION -p containerAppsEnvironmentName=$ENVIRONMENT_NAME \
           -p containerRegistryName=$AZURE_CONTAINER_REGISTRY_NAME -p applicationInsightsName=$APPINSIGHTS_NAME \
           -p AzureBlobs_Account=$STORAGE_NAME -p AzureBlobs_Container="documents" -p AzureQueues_Account=$STORAGE_NAME -p AzureQueues_QueueName="requests" \
           -p AzureAISearch_Endpoint=$SEARCH_ENDPOINT -p AzureOpenAIText_Endpoint=$OPENAI_ENDPOINT -p AzureOpenAIText_Deployment=$AI_TEXT_DEPLOYMENT \
           -p AzureOpenAIEmbedding_Endpoint=$OPENAI_ENDPOINT -p AzureOpenAIEmbedding_Deployment=$AI_EMBEDDING_DEPLOYMENT \
           -p AzureAIDocIntel_Endpoint=$DOC_INTEL_ENDPOINT \
-          -p identityName=$IDENTITY_NAME -p imageName=$IMAGE_NAME --query properties.outputs.uri.value)
-
-echo "deployment uri: $URI"
+          -p identityName=$IDENTITY_NAME -p imageName=$IMAGE_NAME

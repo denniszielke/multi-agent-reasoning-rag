@@ -1,11 +1,10 @@
-targetScope = 'resourceGroup'
 param identityName string
 param location string = resourceGroup().location
 param containerAppsEnvironmentName string
 param imageName string
 
 @description('The tags to be assigned to the created resources.')
-param tags object
+param tags object  = {}
 
 resource userIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' existing = {
   name: identityName
@@ -28,8 +27,8 @@ param AzureOpenAIEmbedding_Endpoint string
 param AzureOpenAIEmbedding_Deployment string
 param AzureAIDocIntel_Endpoint string
 
-param KernelMemory__ServiceAuthorization__AccessKey1 string = uniqueString(resourceGroup().id)
-param KernelMemory__ServiceAuthorization__AccessKey2 string = uniqueString(resourceGroup().id)
+param KernelMemory__ServiceAuthorization__AccessKey1 string = '${uniqueString(resourceGroup().id)}-${kmServiceName}-${uniqueString(resourceGroup().id)}'
+param KernelMemory__ServiceAuthorization__AccessKey2 string = '${uniqueString(resourceGroup().id)}-${kmServiceName}-${uniqueString(resourceGroup().id)}'
 
 //////// Previously created resources
 
