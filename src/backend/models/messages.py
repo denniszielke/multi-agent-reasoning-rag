@@ -2,10 +2,15 @@ import uuid
 from enum import Enum
 from typing import Literal, Optional
 
-from autogen_core.models import (AssistantMessage,
-                                            FunctionExecutionResultMessage,
-                                            LLMMessage, SystemMessage,
-                                            UserMessage)
+#from autogen_core.models import (AssistantMessage, FunctionExecutionResultMessage, LLMMessage, SystemMessage, UserMessage)
+from autogen_core.components.models import (
+    AssistantMessage,
+    FunctionExecutionResultMessage,
+    LLMMessage,
+    SystemMessage,
+    UserMessage,
+)
+
 from pydantic import BaseModel, Field
 
 

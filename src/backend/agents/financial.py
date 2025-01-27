@@ -1,9 +1,14 @@
 from typing import List
 
-from autogen_core import AgentId
-from autogen_core import default_subscription
-from autogen_ext.models.openai import AzureOpenAIChatCompletionClient
-from autogen_core.tools import FunctionTool, Tool
+# from autogen_core import AgentId
+#from autogen_core import default_subscription
+#from autogen_ext.models.openai import AzureOpenAIChatCompletionClient
+#from autogen_core.tools import FunctionTool, Tool
+
+from autogen_core.base import AgentId
+from autogen_core.components import default_subscription
+from autogen_core.components.models import AzureOpenAIChatCompletionClient
+from autogen_core.components.tools import FunctionTool, Tool
 
 from agents.base_agent import BaseAgent
 from context.cosmos_memory import CosmosBufferedChatCompletionContext

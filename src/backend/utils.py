@@ -4,11 +4,15 @@ import os
 import requests
 from azure.identity import DefaultAzureCredential
 from typing import Any, Dict, List, Optional, Tuple
-
-from autogen_core import SingleThreadedAgentRuntime
-from autogen_core import AgentId
-from autogen_core.tool_agent import ToolAgent
-from autogen_core.tools import Tool
+#autogen changes
+#from autogen_core import SingleThreadedAgentRuntime
+#from autogen_core import AgentId
+#from autogen_core.tool_agent import ToolAgent
+#from autogen_core.tools import Tool
+from autogen_core.application import SingleThreadedAgentRuntime
+from autogen_core.base import AgentId
+from autogen_core.components.tool_agent import ToolAgent
+from autogen_core.components.tools import Tool
 
 from agents.group_chat_manager import GroupChatManager
 from agents.financial import FinancialAgent, get_financial_tools

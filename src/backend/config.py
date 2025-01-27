@@ -1,11 +1,11 @@
 # config.py
 import logging
 import os
-
-from autogen_ext.models.openai import AzureOpenAIChatCompletionClient
+#autogen changes
+#from autogen_ext.models.openai import AzureOpenAIChatCompletionClient
+from autogen_core.components.models import AzureOpenAIChatCompletionClient
 from azure.cosmos.aio import CosmosClient
-from azure.identity import (ClientSecretCredential, DefaultAzureCredential,
-                                get_bearer_token_provider)
+from azure.identity import (ClientSecretCredential, DefaultAzureCredential, get_bearer_token_provider)
 from dotenv import load_dotenv
 
 load_dotenv()

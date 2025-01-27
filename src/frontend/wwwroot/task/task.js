@@ -69,7 +69,7 @@
       case "HrAgent":
         agentIcon = "hr_agent";
         break;
-      case "ExpenseBillingAgent":
+      case "FinancialAgent":
         agentIcon = "expense_billing_agent";
         break;
       case "InvoiceReconciliationAgent":

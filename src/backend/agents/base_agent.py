@@ -1,14 +1,26 @@
 import logging
 from typing import Any, List, Mapping
 
-from autogen_core import AgentId, MessageContext
-from autogen_core import RoutedAgent, message_handler
-from autogen_ext.models.openai import AzureOpenAIChatCompletionClient
-from autogen_core.models import (AssistantMessage,
-                                            LLMMessage, SystemMessage,
-                                            UserMessage)
-from autogen_core.tool_agent import tool_agent_caller_loop
-from autogen_core.tools import Tool
+#autogen changes
+#from autogen_core import AgentId, MessageContext
+#from autogen_core import RoutedAgent, message_handler
+#from autogen_ext.models.openai import AzureOpenAIChatCompletionClient
+#from autogen_core.tool_agent import tool_agent_caller_loop
+#from autogen_core.tools import Tool
+#from autogen_core.models import (AssistantMessage, LLMMessage, SystemMessage, UserMessage)
+
+from autogen_core.base import AgentId, MessageContext
+from autogen_core.components import RoutedAgent, message_handler
+from autogen_core.components.models import (
+    AssistantMessage,
+    AzureOpenAIChatCompletionClient,
+    LLMMessage,
+    SystemMessage,
+    UserMessage,
+)
+from autogen_core.components.tool_agent import tool_agent_caller_loop
+from autogen_core.components.tools import Tool
+
 
 from context.cosmos_memory import CosmosBufferedChatCompletionContext
 from models.messages import (ActionRequest, ActionResponse,

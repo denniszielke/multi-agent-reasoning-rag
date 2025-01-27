@@ -89,8 +89,7 @@ resource database 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases@2022-05-15
             version: 2
             paths: [
               '/id'
-            ]
-            
+            ]            
           }
         }
       }

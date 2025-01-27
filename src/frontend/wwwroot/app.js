@@ -33,6 +33,8 @@
         console.log("viewRoute:", viewRoute);
         const viewContext = sessionStorage.getItem('context');
         const noCache = '?nocache=' + new Date().getTime();
+
+        if (viewIframe == null) return;
         switch (viewRoute) {
             case 'home':
                 viewIframe.src = 'home/home.html' + noCache;
@@ -103,6 +105,7 @@
     }
 
     const getMyTasks = () => {
+        if (myTasksMenu != null)
         myTasksMenu.innerHTML = `
             <div class="notification">
                 <i class="fa-solid fa-circle-notch fa-spin mr-3"></i> Loading tasks...
@@ -123,7 +126,8 @@
         
                         console.log('getMyTasks', data);
         
-                        myTasksMenu.innerHTML = '';
+                        if (myTasksMenu != null)
+                            myTasksMenu.innerHTML = '';
         
                         if (data && data.length > 0) {
         
@@ -150,8 +154,9 @@
                                     <div class="tag is-dark ml-3">${completedSteps}/${task.total_steps}</div>
                                 </a>
                                 `;
-        
-                                myTasksMenu.appendChild(newTaskItem);
+                                
+                                if (myTasksMenu != null)
+                                    myTasksMenu.appendChild(newTaskItem);
         
                                 newTaskItem.querySelector('.menu-task').addEventListener('click', (event) => {
                                     const sessionId = event.target.closest('.menu-task').dataset.id;
@@ -179,11 +184,12 @@
                                 if (task.overall_status === 'rejected') stagesRejectedCount++;
         
                                 const addS = (word, count) => (count === 1) ? word : word + 's';
-        
-                                tasksStats.innerHTML = `
-                                    <li><a><strong>${inCompletedTaskCount}</strong> ${addS('task', inCompletedTaskCount)} completed</a></li>
-                                    <li><a><strong>${inProgressTaskCount}</strong> ${addS('task', inProgressTaskCount)} in progress</a></li>
-                                `;
+                                
+                                if (tasksStats != null)
+                                    tasksStats.innerHTML = `
+                                        <li><a><strong>${inCompletedTaskCount}</strong> ${addS('task', inCompletedTaskCount)} completed</a></li>
+                                        <li><a><strong>${inProgressTaskCount}</strong> ${addS('task', inProgressTaskCount)} in progress</a></li>
+                                    `;
         
                                 taskCount++;
         

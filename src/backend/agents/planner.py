@@ -3,12 +3,20 @@ import json
 import logging
 import uuid
 from typing import List, Optional
+#autogen changes
+#from autogen_core import MessageContext
+#from autogen_core import (RoutedAgent, default_subscription,message_handler)
+#from autogen_core.models import (LLMMessage, UserMessage)
+#from autogen_ext.models.openai import AzureOpenAIChatCompletionClient
 
-from autogen_core import MessageContext
-from autogen_core import (RoutedAgent, default_subscription,
-                                     message_handler)
-from autogen_core.models import (LLMMessage, UserMessage)
-from autogen_ext.models.openai import AzureOpenAIChatCompletionClient
+from autogen_core.base import AgentId, MessageContext
+from autogen_core.components import RoutedAgent, default_subscription, message_handler
+from autogen_core.components.models import AzureOpenAIChatCompletionClient
+from autogen_core.components.models import (
+    AzureOpenAIChatCompletionClient,
+    LLMMessage,
+    UserMessage,
+)
 from pydantic import BaseModel
 
 from context.cosmos_memory import CosmosBufferedChatCompletionContext
