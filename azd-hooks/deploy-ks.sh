@@ -2,28 +2,14 @@
 
 set -e
 
-SERVICE_NAME="$1"
-
-if [ "$SERVICE_NAME" == "" ]; then
-echo "No phase name provided - aborting"
-exit 0;
-fi
-
-AZURE_ENV_NAME="$2"
-
-SOURCENUMBER="$3"
+AZURE_ENV_NAME="$1"
 
 if [ "$AZURE_ENV_NAME" == "" ]; then
 echo "No environment name provided - aborting"
 exit 0;
 fi
 
-if [[ $SERVICE_NAME =~ ^[a-z0-9]{3,12}$ ]]; then
-    echo "service name $SERVICE_NAME is valid"
-else
-    echo "service name $SERVICE_NAME is invalid - only numbers and lower case min 5 and max 12 characters allowed - aborting"
-    exit 0;
-fi
+SERVICE_NAME="km-service"
 
 RESOURCE_GROUP="rg-$AZURE_ENV_NAME"
 
@@ -43,8 +29,14 @@ ENVIRONMENT_NAME=$(az resource list -g $RESOURCE_GROUP --resource-type "Microsof
 IDENTITY_NAME=$(az resource list -g $RESOURCE_GROUP --resource-type "Microsoft.ManagedIdentity/userAssignedIdentities" --query "[0].name" -o tsv)
 SEARCH_NAME=$(az resource list -g $RESOURCE_GROUP --resource-type "Microsoft.Search/searchServices" --query "[0].name" -o tsv)
 COSMOSDB_NAME=$(az resource list -g $RESOURCE_GROUP --resource-type "Microsoft.DocumentDB/databaseAccounts" --query "[0].name" -o tsv)
-
+STORAGE_NAME=$(az resource list -g $RESOURCE_GROUP --resource-type "Microsoft.Storage/storageAccounts" --query "[0].name" -o tsv)
 AZURE_SUBSCRIPTION_ID=$(az account show --query id -o tsv)
+
+SEARCH_ENDPOINT=$(echo "https://$SEARCH_NAME.search.windows.net")
+OPENAI_ENDPOINT=$(az cognitiveservices account show -n $OPENAI_NAME -g $RESOURCE_GROUP --query properties.endpoint -o tsv)
+DOC_INTEL_ENDPOINT=$(az cognitiveservices account show -n $DOC_INTEL_NAME -g $RESOURCE_GROUP --query properties.endpoint -o tsv)
+AI_TEXT_DEPLOYMENT="gpt-4o"
+AI_EMBEDDING_DEPLOYMENT="text-embedding-3-small"
 
 echo "container registry name: $AZURE_CONTAINER_REGISTRY_NAME"
 echo "application insights name: $APPINSIGHTS_NAME"
@@ -53,7 +45,13 @@ echo "doci name: $DOC_INTEL_NAME"
 echo "cosmosdb name: $COSMOSDB_NAME"
 echo "search name: $SEARCH_NAME"
 echo "identity name: $IDENTITY_NAME"
-echo "service name: $SERVICE_NAME"
+echo "storage name: $STORAGE_NAME"
+echo "search endpoint: $SEARCH_ENDPOINT"
+echo "openai endpoint: $OPENAI_ENDPOINT"
+echo "doc intel endpoint: $DOC_INTEL_ENDPOINT"
+echo "ai text deployment: $AI_TEXT_DEPLOYMENT"
+echo "ai embedding deployment: $AI_EMBEDDING_DEPLOYMENT"
+
 
 CONTAINER_APP_EXISTS=$(az resource list -g $RESOURCE_GROUP --resource-type "Microsoft.App/containerApps" --query "[?contains(name, '$SERVICE_NAME')].id" -o tsv)
 EXISTS="false"
@@ -67,16 +65,19 @@ fi
 
 IMAGE_TAG=$(date '+%m%d%H%M%S')
 
-az acr build --subscription ${AZURE_SUBSCRIPTION_ID} --registry ${AZURE_CONTAINER_REGISTRY_NAME} --image $SERVICE_NAME:$IMAGE_TAG ./src/$SERVICE_NAME
-IMAGE_NAME="${AZURE_CONTAINER_REGISTRY_NAME}.azurecr.io/$SERVICE_NAME:$IMAGE_TAG"
+#az acr import -n $AZURE_CONTAINER_REGISTRY_NAME --source  docker.io/library/kernelmemory/service
+#docker tag kernelmemory/service "${AZURE_CONTAINER_REGISTRY_NAME}.azurecr.io/kernelmemory/service"
+IMAGE_NAME="${AZURE_CONTAINER_REGISTRY_NAME}.azurecr.io/kernelmemory/service"
 
 echo "deploying image: $IMAGE_NAME"
 
-ACA_NAME=roadcopilot$SERVICE_NAME
-
-URI=$(az deployment group create -g $RESOURCE_GROUP -f ./infra/core/app/web.bicep \
-          -p name=$ACA_NAME -p location=$LOCATION -p containerAppsEnvironmentName=$ENVIRONMENT_NAME \
-          -p containerRegistryName=$AZURE_CONTAINER_REGISTRY_NAME -p applicationInsightsName=$APPINSIGHTS_NAME -p serviceName=$SERVICE_NAME -p acssourceNumber=$SOURCENUMBER \
-          -p openaiName=$OPENAI_NAME -p identityName=$IDENTITY_NAME -p imageName=$IMAGE_NAME -p databaseAccountName=$COSMOSDB_NAME --query properties.outputs.uri.value)
+URI=$(az deployment group create -g $RESOURCE_GROUP -f ./infra/app/kernelservice.bicep \
+          -p kmServiceName=$SERVICE_NAME -p location=$LOCATION -p containerAppsEnvironmentName=$ENVIRONMENT_NAME \
+          -p containerRegistryName=$AZURE_CONTAINER_REGISTRY_NAME -p applicationInsightsName=$APPINSIGHTS_NAME \
+          -p AzureBlobs_Account=$STORAGE_NAME -p AzureBlobs_Container="documents" -p AzureQueues_Account=$STORAGE_NAME -p AzureQueues_QueueName="requests" \
+          -p AzureAISearch_Endpoint=$SEARCH_ENDPOINT -p AzureOpenAIText_Endpoint=$OPENAI_ENDPOINT -p AzureOpenAIText_Deployment=$AI_TEXT_DEPLOYMENT \
+          -p AzureOpenAIEmbedding_Endpoint=$OPENAI_ENDPOINT -p AzureOpenAIEmbedding_Deployment=$AI_EMBEDDING_DEPLOYMENT \
+          -p AzureAIDocIntel_Endpoint=$DOC_INTEL_ENDPOINT \
+          -p identityName=$IDENTITY_NAME -p imageName=$IMAGE_NAME --query properties.outputs.uri.value)
 
 echo "deployment uri: $URI"

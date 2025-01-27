@@ -12,6 +12,9 @@ param aiResourceLocation string
 @description('Id of the user or app to assign application roles')
 param resourceGroupName string = ''
 param containerAppsEnvironmentName string = ''
+param storageAccountName string = ''
+param containerName string = 'documents'
+param queueName string = 'requests'
 param containerRegistryName string = ''
 param openaiName string = ''
 param cosmosDbAccountName string = ''
@@ -76,6 +79,8 @@ module containerApps './core/host/container-apps.bicep' = {
   scope: resourceGroup
   params: {
     name: 'app'
+    documentIntelName: docintel.outputs.accountName
+    storageAccountName: storage.outputs.storageAccountName
     containerAppsEnvironmentName: !empty(containerAppsEnvironmentName) ? containerAppsEnvironmentName : '${abbrs.appManagedEnvironments}${resourceToken}'
     containerRegistryName: !empty(containerRegistryName) ? containerRegistryName : '${abbrs.containerRegistryRegistries}${resourceToken}'
     location: location
@@ -100,6 +105,17 @@ module openai './ai/openai.bicep' = {
     capacity: openaiCapacity
   }
 }
+
+module docintel './ai/docintel.bicep' = {
+  name: 'docintel'
+  scope: resourceGroup
+  params: {
+    location: !empty(aiResourceLocation) ? aiResourceLocation : location
+    tags: tags
+    name: !empty(openaiName) ? openaiName : '${abbrs.cognitiveServicesFormRecognizer}${resourceToken}'
+  }
+}
+
 module cosmodDb './core/data/cosmosdb.bicep' = {
   name: 'sql'
   scope: resourceGroup
@@ -109,6 +125,16 @@ module cosmodDb './core/data/cosmosdb.bicep' = {
     databaseName: cosmosDatabaseName
     containerName: cosmosContainerName
     tags: tags
+  }
+}
+
+module storage './core/data/storage.bicep' = {
+  name: 'storage'
+  scope: resourceGroup
+  params: {
+    storageAccountName: !empty(storageAccountName) ? storageAccountName : '${abbrs.storageAccounts}${resourceToken}'
+    containerName: containerName
+    queueName: queueName
   }
 }
 
@@ -163,5 +189,6 @@ output AZURE_AI_SEARCH_NAME string = search.outputs.searchName
 output AZURE_AI_SEARCH_ENDPOINT string = search.outputs.searchEndpoint
 output AZURE_AI_SEARCH_KEY string = search.outputs.searchAdminKey
 output AZURE_AI_SEARCH_INDEX string = searchIndexName
+output STORAGE_ACCOUNT_URL string = storage.outputs.storageAccountUrl
 output BACKEND_API_URL string = 'http://localhost:8000'
 output FRONTEND_SITE_NAME string = 'http://127.0.0.1:3000'

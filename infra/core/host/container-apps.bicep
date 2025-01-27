@@ -5,6 +5,8 @@ param tags object = {}
 param identityName string = ''
 param openaiName string
 param searchName string
+param documentIntelName string
+param storageAccountName string
 param containerAppsEnvironmentName string
 param containerRegistryName string
 param logAnalyticsWorkspaceName string
@@ -52,9 +54,25 @@ module containerRegistryAccess '../security/registry-access.bicep' = {
 }
 
 module searchAccess '../security/search-access.bicep' = {
-  name: '${deployment().name}-dynamic-sessions'
+  name: '${deployment().name}-search-access'
   params: {
     searchName: searchName
+    principalId: userIdentity.properties.principalId
+  }
+}
+
+module docIntel '../security/docintel-access.bicep' = {
+  name: '${deployment().name}-docintel-access'
+  params: {
+    documentIntelName: documentIntelName
+    principalId: userIdentity.properties.principalId
+  }
+}
+
+module storage '../security/storage-access.bicep' = {
+  name: '${deployment().name}-storage-access'
+  params: {
+    storageAccountName: storageAccountName
     principalId: userIdentity.properties.principalId
   }
 }

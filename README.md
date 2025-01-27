@@ -38,3 +38,18 @@ deploy the project backend in Azure Container Apps.
 ```
 bash ./azd-hooks/deploy.sh backend $AZURE_ENV_NAME
 ```
+
+## KernelService
+
+
+```
+
+bash ./azd-hooks/deploy-ks.sh $AZURE_ENV_NAME
+
+https://github.com/microsoft/kernel-memory
+
+docker run --volume ./azureappsettings.json:/app/appsettings.Production.json -it --rm -p 9001:9001 kernelmemory/service
+
+
+
+```

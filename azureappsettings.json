@@ -1,0 +1,55 @@
+{
+    "Logging": {
+      "LogLevel": {
+        "Default": "Warning",
+        "Microsoft.AspNetCore": "Warning"
+      }
+    },
+    "KernelMemory": {
+      "Services": {
+        "AzureAIDocIntel": {
+          "Auth": "AzureIdentity",
+          "APIKey": "",
+          "AzureIdentityAudience": null,
+          "Endpoint": "https://.cognitiveservices.azure.com/"
+        },
+        "AzureAISearch": {
+          "Auth": "AzureIdentity",
+          "AzureIdentityAudience": null,
+          "APIKey": "",
+          "Endpoint": "https://srch-.search.windows.net",
+          "UseHybridSearch": false,
+          "UseStickySessions": false
+        },
+        "AzureBlobs": {
+          "Auth": "AzureIdentity",
+          "AzureIdentityAudience": null,
+          "Account": "",
+          "Container": "smemory",
+          "ConnectionString": "",
+          "EndpointSuffix": "core.windows.net"
+        },
+        "AzureOpenAIEmbedding": {
+          "Auth": "AzureIdentity",
+          "AzureIdentityAudience": null,
+          "Endpoint": "https://cog-.openai.azure.com/",
+          "APIKey": "",
+          "Deployment": "text-embedding-3-small",
+          "MaxTokenTotal": 8191,
+          "EmbeddingDimensions": null,
+          "MaxEmbeddingBatchSize": 10,
+          "MaxRetries": 10
+        },
+        "AzureOpenAIText": {
+          "Auth": "AzureIdentity",
+          "AzureIdentityAudience": null,
+          "Endpoint": "https://cog-pge4idpaukhle.openai.azure.com/",
+          "APIKey": "",
+          "Deployment": "gpt-4o",
+          "MaxTokenTotal": 16384,
+          "APIType": "ChatCompletion",
+          "MaxRetries": 10
+        }
+      }
+    }
+  }
