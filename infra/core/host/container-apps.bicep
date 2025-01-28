@@ -81,3 +81,6 @@ output defaultDomain string = containerAppsEnvironment.outputs.defaultDomain
 output environmentName string = containerAppsEnvironment.outputs.name
 output registryLoginServer string = containerRegistry.outputs.loginServer
 output registryName string = containerRegistry.outputs.name
+
+output kmserviceurl string = 'https://km-service.${containerAppsEnvironment.outputs.defaultDomain}'
+output kmauthorization string = '${uniqueString(resourceGroup().id)}-km-service-${uniqueString(resourceGroup().id)}'

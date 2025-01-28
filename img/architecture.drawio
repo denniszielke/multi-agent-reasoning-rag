@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram id="yHFHmsuOctcC47Hb3Qxo" name="Page-1">
-        <mxGraphModel dx="1486" dy="571" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+        <mxGraphModel dx="972" dy="647" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -28,7 +28,10 @@
                 <mxCell id="157" style="edgeStyle=none;html=1;" parent="1" source="129" target="156" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="129" value="Agent" style="aspect=fixed;html=1;points=[];align=center;image;fontSize=12;image=img/lib/mscae/User_Resource.svg;imageBackground=#5BB6FC;rounded=0;" parent="1" vertex="1">
+                <mxCell id="185" style="edgeStyle=none;html=1;" edge="1" parent="1" source="129" target="184">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="129" value="Retrieval" style="aspect=fixed;html=1;points=[];align=center;image;fontSize=12;image=img/lib/mscae/User_Resource.svg;imageBackground=#5BB6FC;rounded=0;" parent="1" vertex="1">
                     <mxGeometry x="430.17" y="349.06999999999994" width="54.17" height="56.43" as="geometry"/>
                 </mxCell>
                 <mxCell id="152" style="edgeStyle=none;html=1;" parent="1" source="130" target="145" edge="1">
@@ -67,7 +70,7 @@
                 <mxCell id="162" style="edgeStyle=none;html=1;" parent="1" source="151" target="150" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="164" style="edgeStyle=none;html=1;" parent="1" source="151" target="129" edge="1">
+                <mxCell id="164" style="edgeStyle=none;html=1;" parent="1" source="151" target="184" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
                 <mxCell id="151" value="Taxonomy" style="shape=image;verticalLabelPosition=bottom;verticalAlign=top;imageAspect=1;aspect=fixed;image=data:image/svg+xml,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0OCA0OSI+PHBhdGggZD0iTTQ0LjUwNSA0Mi4yNjRINi42NDVsMTguMjIyLTI5LjU1IDE5LjYzOCAyOS41NXptLTMzLjMzOS0yLjUyN0gzOS43OWwtMTQuODQ2LTIyLjM0LTEzLjc3NyAyMi4zNHoiIGZpbGw9IiM1MEU2RkYiLz48cGF0aCBkPSJNNi42NTYgNi44MTVMNS43MTQgOS4xNmwxOC45NTEgNy42MTEuOTQyLTIuMzQ0LTE4Ljk1MS03LjYxeiIgZmlsbD0iIzUwRTZGRiIvPjxwYXRoIGQ9Ik02LjM0MSAxMy4xOTRhNC45NzcgNC45NzcgMCAxMDAtOS45NTMgNC45NzcgNC45NzcgMCAwMDAgOS45NTN6bTE4LjkyMiA3LjQ2MWE0Ljk3NyA0Ljk3NyAwIDEwMC05Ljk1MyA0Ljk3NyA0Ljk3NyAwIDAwMCA5Ljk1M3pNOC44MzQgNDYuMjEzYTQuOTc3IDQuOTc3IDAgMTAwLTkuOTUzIDQuOTc3IDQuOTc3IDAgMDAwIDkuOTUzem0zMi44MjUgMGE0Ljk3NyA0Ljk3NyAwIDEwMC05Ljk1MyA0Ljk3NyA0Ljk3NyAwIDAwMCA5Ljk1M3oiIGZpbGw9IiMwMDc4RDQiLz48L3N2Zz4=;" parent="1" vertex="1">
@@ -76,11 +79,11 @@
                 <mxCell id="159" style="edgeStyle=none;html=1;" parent="1" source="155" target="129" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="168" style="edgeStyle=none;html=1;" edge="1" parent="1" source="155" target="146">
+                <mxCell id="168" style="edgeStyle=none;html=1;" parent="1" source="155" target="146" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
                 <mxCell id="155" value="Chunks" style="aspect=fixed;perimeter=ellipsePerimeter;html=1;align=center;shadow=0;dashed=0;spacingTop=3;image;image=img/lib/active_directory/documents.svg;" parent="1" vertex="1">
-                    <mxGeometry x="510" y="510" width="46.2" height="70" as="geometry"/>
+                    <mxGeometry x="520" y="520" width="46.2" height="70" as="geometry"/>
                 </mxCell>
                 <mxCell id="158" style="edgeStyle=none;html=1;" parent="1" source="156" target="155" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
@@ -89,28 +92,34 @@
                     <mxGeometry x="653" y="525.5" width="59" height="59" as="geometry"/>
                 </mxCell>
                 <mxCell id="163" value="Fill in field 3" style="shape=callout;whiteSpace=wrap;html=1;perimeter=calloutPerimeter;position2=0;size=33;position=0.04;rounded=0;" parent="1" vertex="1">
-                    <mxGeometry x="117.12" y="390" width="272.88" height="60" as="geometry"/>
+                    <mxGeometry x="117.12" y="390" width="132.88" height="60" as="geometry"/>
                 </mxCell>
                 <mxCell id="165" value="This is the response, sources and process use to generate the answer&amp;nbsp;" style="shape=callout;whiteSpace=wrap;html=1;perimeter=calloutPerimeter;position2=0.97;size=30;position=0.75;rounded=0;base=30;" parent="1" vertex="1">
-                    <mxGeometry x="165.17" y="280" width="265" height="90" as="geometry"/>
+                    <mxGeometry x="10" y="270" width="177.5" height="90" as="geometry"/>
                 </mxCell>
-                <mxCell id="166" value="" style="edgeStyle=none;html=1;endArrow=none;" edge="1" parent="1" source="148" target="167">
+                <mxCell id="166" value="" style="edgeStyle=none;html=1;endArrow=none;" parent="1" source="148" target="167" edge="1">
                     <mxGeometry relative="1" as="geometry">
                         <mxPoint x="135.80999999999995" y="586.1233382908133" as="sourcePoint"/>
                         <mxPoint x="300" y="579.3348397208556" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="167" value="Storage" style="aspect=fixed;html=1;points=[];align=center;image;fontSize=12;image=img/lib/azure2/storage/Storage_Accounts.svg;" vertex="1" parent="1">
+                <mxCell id="167" value="Storage" style="aspect=fixed;html=1;points=[];align=center;image;fontSize=12;image=img/lib/azure2/storage/Storage_Accounts.svg;" parent="1" vertex="1">
                     <mxGeometry x="177.5" y="559" width="65" height="52" as="geometry"/>
                 </mxCell>
-                <mxCell id="170" value="" style="edgeStyle=none;html=1;endArrow=none;" edge="1" parent="1" source="150" target="169">
+                <mxCell id="170" value="" style="edgeStyle=none;html=1;endArrow=none;" parent="1" source="150" target="169" edge="1">
                     <mxGeometry relative="1" as="geometry">
                         <mxPoint x="354.1700000000001" y="573.8446826444635" as="sourcePoint"/>
                         <mxPoint x="510.1280385553646" y="548.6799744061796" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="169" value="Markdown" style="sketch=0;pointerEvents=1;shadow=0;dashed=0;html=1;strokeColor=none;fillColor=#505050;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;outlineConnect=0;align=center;shape=mxgraph.office.concepts.document;" vertex="1" parent="1">
-                    <mxGeometry x="399" y="545" width="30" height="35" as="geometry"/>
+                <mxCell id="169" value="Markdown" style="sketch=0;pointerEvents=1;shadow=0;dashed=0;html=1;strokeColor=none;fillColor=#505050;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;outlineConnect=0;align=center;shape=mxgraph.office.concepts.document;" parent="1" vertex="1">
+                    <mxGeometry x="420" y="560" width="30" height="35" as="geometry"/>
+                </mxCell>
+                <mxCell id="184" value="Summary" style="aspect=fixed;html=1;points=[];align=center;image;fontSize=12;image=img/lib/mscae/User_Resource.svg;imageBackground=#5BB6FC;rounded=0;" vertex="1" parent="1">
+                    <mxGeometry x="300" y="349.06999999999994" width="54.17" height="56.43" as="geometry"/>
+                </mxCell>
+                <mxCell id="186" value="Generation" style="aspect=fixed;html=1;points=[];align=center;image;fontSize=12;image=img/lib/mscae/User_Resource.svg;imageBackground=#5BB6FC;rounded=0;" vertex="1" parent="1">
+                    <mxGeometry x="193.43" y="292.63999999999993" width="54.17" height="56.43" as="geometry"/>
                 </mxCell>
             </root>
         </mxGraphModel>

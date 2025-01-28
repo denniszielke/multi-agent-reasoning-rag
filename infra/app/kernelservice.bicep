@@ -176,6 +176,10 @@ resource kmService 'Microsoft.App/containerApps@2023-05-01' = {
               value: AzureAISearch_Endpoint
             }
             {
+              name: 'KernelMemory__Services__AzureAISearch__UseHybridSearch'
+              value: 'true'
+            }
+            {
               name: 'KernelMemory__Services__AzureOpenAIText__Endpoint'
               value: AzureOpenAIText_Endpoint
             }

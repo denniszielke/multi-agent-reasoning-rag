@@ -192,3 +192,6 @@ output AZURE_AI_SEARCH_INDEX string = searchIndexName
 output STORAGE_ACCOUNT_URL string = storage.outputs.storageAccountUrl
 output BACKEND_API_URL string = 'http://localhost:8000'
 output FRONTEND_SITE_NAME string = 'http://127.0.0.1:3000'
+output KM_SERVICE_AUTHORIZATION string = containerApps.outputs.kmauthorization
+output KM_SERVICE_URL string = containerApps.outputs.kmserviceurl
+
