@@ -12,9 +12,23 @@ from autogen_core.components.tools import FunctionTool, Tool
 
 from agents.base_agent import BaseAgent
 from context.cosmos_memory import CosmosBufferedChatCompletionContext
+from azure.search.documents.models import (
+    VectorizedQuery
+)
 
-async def get_facts_about_a_company(company_name: str) -> str:
-    return f"The financial for company '{company_name}' are very good."
+from config import Config
+
+
+async def get_facts_about_a_company(company_name: str, description_of_the_fact: str) -> str:
+    
+    vector = VectorizedQuery(vector=Config.GetEmbedding(description_of_the_fact), k_nearest_neighbors=5, fields="vector")
+
+    client = Config.GetSearchClient()
+
+    results = client.search(search_text=company_name, query=vector)
+
+    return results
+    
 
 
 async def get_current_stockvalue(company_name: str) -> str:

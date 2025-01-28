@@ -6,7 +6,10 @@ import os
 from autogen_core.components.models import AzureOpenAIChatCompletionClient
 from azure.cosmos.aio import CosmosClient
 from azure.identity import (ClientSecretCredential, DefaultAzureCredential, get_bearer_token_provider)
+from azure.core.credentials import AzureKeyCredential
+from azure.search.documents import SearchClient
 from dotenv import load_dotenv
+from openai import AzureOpenAI
 
 load_dotenv()
 
@@ -45,10 +48,17 @@ class Config:
 
     FRONTEND_SITE_NAME = GetOptionalConfig("FRONTEND_SITE_NAME", "http://127.0.0.1:3000")
     
+    AI_SEARCH_ENDPOINT = GetRequiredConfig("AI_SEARCH_ENDPOINT")
+    AI_SEARCH_INDEX = GetRequiredConfig("AI_SEARCH_INDEX")
+
+    AZURE_OPENAI_EMBEDDING_DEPLOYMENT_NAME = GetRequiredConfig("AZURE_OPENAI_EMBEDDING_DEPLOYMENT_NAME")
+    AZURE_OPENAI_EMBEDDING_MODEL = GetRequiredConfig("AZURE_OPENAI_EMBEDDING_MODEL")
 
     __azure_credentials = DefaultAzureCredential()
     __comos_client = None
     __cosmos_database = None
+    __search_client = None
+    __azure_openai_client = None
     __aoai_chatCompletionClient = None
     __aoai_smallchatCompletionClient = None
 
@@ -65,6 +75,32 @@ class Config:
 
         # Otherwise, use the default Azure credential which includes managed identity
         return Config.__azure_credentials
+
+    def GetSearchClient():
+        if Config.__search_client is None:
+
+            Config.__search_client = SearchClient(
+                endpoint=Config.AI_SEARCH_ENDPOINT,
+                index_name=Config.AI_SEARCH_INDEX,
+                credential=Config.GetAzureCredentials()
+            )
+
+        return Config.__search_client
+
+    def GetOpenAIClient():
+        if Config.__azure_openai_client is None:
+            Config.__azure_openai_client = AzureOpenAI(
+                azure_ad_token_provider=Config.GetTokenProvider(
+                    "https://cognitiveservices.azure.com/.default"
+                ),
+                api_version=Config.AZURE_OPENAI_API_VERSION,
+                azure_endpoint=Config.AZURE_OPENAI_ENDPOINT,
+            )
+
+        return Config.__azure_openai_client
+
+    def GetEmbedding(input: str):
+        return Config.GetOpenAIClient().embeddings.create(input=input, model = Config.AZURE_OPENAI_EMBEDDING_MODEL).data[0].embedding
 
     # Gives us a cached approach to DB access
     def GetCosmosDatabaseClient():

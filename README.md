@@ -42,14 +42,13 @@ bash ./azd-hooks/deploy.sh backend $AZURE_ENV_NAME
 ## KernelService
 
 
-```
-
-bash ./azd-hooks/deploy-ks.sh $AZURE_ENV_NAME
-
+Kernelservice is used here as the ingestion pipeline:
 https://github.com/microsoft/kernel-memory
 
-docker run --volume ./azureappsettings.json:/app/appsettings.Production.json -it --rm -p 9001:9001 kernelmemory/service
 
-
-
+Deploy kernelservice with the following command
 ```
+bash ./azd-hooks/deploy-ks.sh $AZURE_ENV_NAME
+```
+
+Ingest documents via the src/ingestion/uploader.py
