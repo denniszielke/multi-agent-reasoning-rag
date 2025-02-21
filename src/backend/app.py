@@ -41,11 +41,12 @@ logging.getLogger("azure.identity.aio._internal").setLevel(logging.WARNING)
 app = FastAPI()
 
 frontend_url = Config.FRONTEND_SITE_NAME
+print(f"Frontend URL: {frontend_url}")
 
 # Add this near the top of your app.py, after initializing the app
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[frontend_url],  # Add your frontend server URL
+    allow_origins=[frontend_url, '8flcjjpw-3000.euw.devtunnels.ms'],  # Add your frontend server URL
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

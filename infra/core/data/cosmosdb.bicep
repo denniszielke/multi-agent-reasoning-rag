@@ -112,6 +112,6 @@ resource database 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases@2022-05-15
     }
 }
 
-output name string = account.name
+output accountName string = account.name
 output endpoint string = account.properties.documentEndpoint
 output key string = listKeys(account.id, '2024-05-15').primaryMasterKey

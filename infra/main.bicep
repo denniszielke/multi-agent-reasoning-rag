@@ -23,6 +23,7 @@ param cosmosContainerName string = 'documents'
 param applicationInsightsDashboardName string = ''
 param applicationInsightsName string = ''
 param logAnalyticsName string = ''
+param principalId string
 
 var abbrs = loadJsonContent('./abbreviations.json')
 var resourceToken = toLower(uniqueString(subscription().id, environmentName, location))
@@ -89,6 +90,7 @@ module containerApps './core/host/container-apps.bicep' = {
     identityName: '${abbrs.managedIdentityUserAssignedIdentities}api-agents'
     openaiName: openai.outputs.openaiName
     searchName: search.outputs.searchName
+    cosmosaccountName: cosmodDb.outputs.accountName
   }
 }
 
@@ -158,6 +160,21 @@ module monitoring './core/monitor/monitoring.bicep' = {
     logAnalyticsName: !empty(logAnalyticsName) ? logAnalyticsName : '${abbrs.operationalInsightsWorkspaces}${resourceToken}'
     applicationInsightsName: !empty(applicationInsightsName) ? applicationInsightsName : '${abbrs.insightsComponents}${resourceToken}'
     applicationInsightsDashboardName: !empty(applicationInsightsDashboardName) ? applicationInsightsDashboardName : '${abbrs.portalDashboards}${resourceToken}'
+  }
+}
+
+module usersecurity './core/security/user-access.bicep' = {
+  name: 'usersecurity'
+  scope: resourceGroup
+  params: {
+    principalType: 'User'
+    userPrincipalId: principalId
+    containerRegistryName: !empty(containerRegistryName) ? containerRegistryName : '${abbrs.containerRegistryRegistries}${resourceToken}'
+    documentIntelName: docintel.outputs.accountName
+    storageAccountName: storage.outputs.storageAccountName
+    openaiName: openai.outputs.openaiName
+    searchName: search.outputs.searchName
+    cosmosaccountName: cosmodDb.outputs.accountName
   }
 }
 

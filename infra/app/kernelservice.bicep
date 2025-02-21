@@ -109,7 +109,7 @@ resource kmService 'Microsoft.App/containerApps@2023-05-01' = {
             }
             {
               name: 'KernelMemory__DefaultIndexName'
-              value: 'default'
+              value: 'finance'
             }
             {
               name: 'KernelMemory__ServiceAuthorization__Enabled'

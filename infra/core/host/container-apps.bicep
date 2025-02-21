@@ -11,6 +11,7 @@ param containerAppsEnvironmentName string
 param containerRegistryName string
 param logAnalyticsWorkspaceName string
 param applicationInsightsName string
+param cosmosaccountName string
 
 module containerAppsEnvironment 'container-apps-environment.bicep' = {
   name: '${name}-container-apps-environment'
@@ -73,6 +74,14 @@ module storage '../security/storage-access.bicep' = {
   name: '${deployment().name}-storage-access'
   params: {
     storageAccountName: storageAccountName
+    principalId: userIdentity.properties.principalId
+  }
+}
+
+module cosmos '../security/cosmos-access.bicep' = {
+  name: '${deployment().name}-cosmos-access'
+  params: {
+    cosmosaccountName: cosmosaccountName
     principalId: userIdentity.properties.principalId
   }
 }

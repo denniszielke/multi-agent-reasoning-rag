@@ -1,10 +1,11 @@
 param searchName string
 param principalId string
+param principalType string = ''
 param suffix string = uniqueString(resourceGroup().id)
 
 // Search Index Data Contributor
-resource roleAssignment1 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-  name: guid('Search Index Data Contributor-${suffix}')
+resource searchindexdatacontributorassignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  name: guid('Search Index Data Contributor-${principalType}${principalId}${suffix}')
   scope: search
   properties: {
     roleDefinitionId: subscriptionResourceId(
@@ -12,13 +13,13 @@ resource roleAssignment1 'Microsoft.Authorization/roleAssignments@2022-04-01' = 
       '8ebe5a00-799e-43f5-93ac-243d3dce84a7'
     )
     principalId: principalId
-    principalType: 'ServicePrincipal'
+    principalType: !empty(principalType) ? principalType : 'ServicePrincipal'
   }
 }
 
 // Search Service Contributor
-resource roleAssignment2 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-  name: guid('Search Service Contributor-${suffix}')
+resource searchcontributorassignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  name: guid('Search Service Contributor-${principalType}${principalId}${suffix}')
   scope: search
   properties: {
     roleDefinitionId: subscriptionResourceId(
@@ -26,7 +27,7 @@ resource roleAssignment2 'Microsoft.Authorization/roleAssignments@2022-04-01' = 
       '7ca78c08-252a-4471-8644-bb5ff32d4ba0'
     )
     principalId: principalId
-    principalType: 'ServicePrincipal'
+    principalType: !empty(principalType) ? principalType : 'ServicePrincipal'
   }
 }
 

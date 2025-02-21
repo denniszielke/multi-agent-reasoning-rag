@@ -10,6 +10,9 @@
     },
     "openaiCapacity": {
       "value": "${OPENAI_CAPACITY}"
+    },
+    "principalId": {
+      "value": "${AZURE_PRINCIPAL_ID}"
     }
   }
 }
